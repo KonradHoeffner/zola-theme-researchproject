@@ -10,7 +10,7 @@ tagline="A reusable Zola starter for research projects"
 color="#6e8fb1"
 github=""
 theme_repo="${THEME_REPO:-https://github.com/KonradHoeffner/zola-theme-researchproject.git}"
-theme_version="${THEME_VERSION:-v0.1.0}"
+theme_version="${THEME_VERSION:-v0.2.0}"
 theme_path=""
 target=""
 
@@ -25,7 +25,7 @@ Options:
   --tagline TEXT        Sidebar tagline
   --color HEX           Theme colour, for example "#6e8fb1"
   --github URL          GitHub link, or "" to hide it
-  --theme-version TAG   Theme tag to pin (default: v0.1.0)
+  --theme-version TAG   Theme tag to pin (default: v0.2.0)
   --theme-repo URL      Theme repository URL
   --theme-path PATH     Use a local theme directory instead of a submodule
   -h, --help            Show this help

@@ -39,14 +39,14 @@ The output is written to `template/public/`.
   --color "#6e8fb1"
 ```
 
-The script copies `template/`, replaces the example configuration, initialises a git repository, and adds the theme as a submodule pinned to `v0.1.0`.
+The script copies `template/`, replaces the example configuration, initialises a git repository, and adds the theme as a submodule pinned to `v0.2.0`.
 
 Other options:
 
 ```text
 --description TEXT      Site description
 --github URL            GitHub link, or "" to hide it
---theme-version TAG     Theme tag to pin (default: v0.1.0)
+--theme-version TAG     Theme tag to pin (default: v0.2.0)
 --theme-repo URL        Theme repository URL
 --theme-path PATH       Use a local theme directory instead of a submodule
 ```
@@ -98,7 +98,7 @@ For a real site, the theme is a pinned submodule:
 ```sh
 git submodule add https://github.com/KonradHoeffner/zola-theme-researchproject.git themes/researchproject
 cd themes/researchproject
-git checkout v0.1.0
+git checkout v0.2.0
 ```
 
 Then clone the site with `--recurse-submodules`, or run `git submodule update --init --recursive`.
@@ -177,15 +177,15 @@ For a custom domain, set `base_url` to the domain and add `static/CNAME` contain
 
 ## Versioning
 
-The theme is versioned with git tags, for example `v0.1.0`. A site records the exact theme commit in its submodule. Updating the theme is deliberate:
+The theme is versioned with git tags, for example `v0.2.0`. A site records the exact theme commit in its submodule. Updating the theme is deliberate:
 
 ```sh
 cd themes/researchproject
 git fetch --tags
-git checkout v0.2.0
+git checkout v0.3.0
 cd ../..
 git add themes/researchproject
-git commit -m "Update theme to v0.2.0"
+git commit -m "Update theme to v0.3.0"
 ```
 
 A theme update does not silently change every site.

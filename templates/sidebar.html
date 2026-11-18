@@ -1,10 +1,12 @@
 {% set logo = config.extra.logo | default(value="logo.svg") %}
 {% set here = current_url | default(value="") %}
 {% set here_path = current_path | default(value="") %}
+{% set home_label = config.extra.home_label | default(value="Home") %}
+{% set home_aria_label = config.extra.home_aria_label | default(value="home") %}
 {% set root = get_section(path="_index.md") %}
 <div class="sidebar">
   <div class="sidebar-about">
-    <a href="{{ config.base_url }}/" aria-label="{{ config.title }} home">
+    <a href="{{ config.base_url }}/" aria-label="{{ config.title }} {{ home_aria_label }}">
       <img id="logo" src="{{ get_url(path=logo) }}" alt="{{ config.title }}">
     </a>
     {% if config.extra.tagline | default(value="") %}
@@ -13,7 +15,7 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item{% if here_path == '/' %} active{% endif %}" href="{{ config.base_url }}/">Home</a>
+    <a class="sidebar-nav-item{% if here_path == '/' %} active{% endif %}" href="{{ config.base_url }}/">{{ home_label }}</a>
     {% for p in root.pages %}
       {% if not p.hidden %}
       <a class="sidebar-nav-item{% if here == p.permalink %} active{% endif %}" href="{{ p.permalink }}">{{ p.title }}</a>

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Page not found · {{ config.title }}{% endblock %}
+{% block title %}{% set not_found_title = config.extra.not_found_title | default(value="Page not found") %}{{ not_found_title }} · {{ config.title }}{% endblock %}
 
 {% block content %}
+{% set not_found_title = config.extra.not_found_title | default(value="Page not found") %}
+{% set not_found_text = config.extra.not_found_text | default(value="The requested page could not be found.") %}
+{% set back_home_label = config.extra.back_home_label | default(value="Back to the homepage") %}
 <div class="page">
-  <h1 class="page-title">Page not found</h1>
-  <p>The requested page could not be found.</p>
-  <p><a href="{{ config.base_url }}/">Back to the homepage</a></p>
+  <h1 class="page-title">{{ not_found_title }}</h1>
+  <p>{{ not_found_text }}</p>
+  <p><a href="{{ config.base_url }}/">{{ back_home_label }}</a></p>
 </div>
 {% endblock %}

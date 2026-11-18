@@ -11,7 +11,7 @@ initialised. If you copied `template/` manually, add it first:
 ```sh
 git submodule add https://github.com/KonradHoeffner/zola-theme-researchproject.git themes/researchproject
 cd themes/researchproject
-git checkout v0.1.0
+git checkout v0.2.0
 cd ../..
 ```
 

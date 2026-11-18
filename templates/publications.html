@@ -5,13 +5,16 @@
 {% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
 
 {% block content %}
+{% set download_label = config.extra.publications_download_label | default(value="Download BibTeX") %}
+{% set no_publications_label = config.extra.no_publications_label | default(value="No publications have been added yet.") %}
+{% set undated_label = config.extra.undated_label | default(value="Undated") %}
 <div class="page">
   <h1 class="page-title">{{ page.title }}</h1>
   {{ page.content | safe }}
 
   {% set bib = load_data(path="publications.bib", format="bibtex") %}
   <p class="publication-download">
-    <a href="{{ get_url(path='publications.bib') }}">Download BibTeX</a>
+    <a href="{{ get_url(path='publications.bib') }}">{{ download_label }}</a>
   </p>
 
   {% if bib.bibliographies %}
@@ -22,7 +25,7 @@
       {% if year != current_year %}
         {% if not loop.first %}</section>{% endif %}
         <section class="publication-year">
-        <h2>{% if year %}{{ year }}{% else %}Undated{% endif %}</h2>
+        <h2>{% if year %}{{ year }}{% else %}{{ undated_label }}{% endif %}</h2>
         {% set_global current_year = year %}
       {% endif %}
 
@@ -57,7 +60,7 @@
     {% endfor %}
     </section>
   {% else %}
-    <p>No publications have been added yet.</p>
+    <p>{{ no_publications_label }}</p>
   {% endif %}
 </div>
 {% endblock %}
