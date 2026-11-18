@@ -127,7 +127,7 @@ else
   git -C "$target" init -q -b main
   git -C "$target" submodule add "$theme_repo" themes/researchproject
   git -C "$target/themes/researchproject" checkout "$theme_version"
-  git -C "$target" add .gitmodules themes/researchproject
+  git -C "$target" add -A
 fi
 
 cat <<EOF
