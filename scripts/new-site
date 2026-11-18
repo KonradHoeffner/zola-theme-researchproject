@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+title="Example Research Project"
+url="https://example.org"
+description="A starter site for research projects and research groups."
+tagline="A reusable Zola starter for research projects"
+color="#6e8fb1"
+github=""
+theme_repo="${THEME_REPO:-https://github.com/KonradHoeffner/zola-theme-researchproject.git}"
+theme_version="${THEME_VERSION:-v0.1.0}"
+theme_path=""
+target=""
+
+usage() {
+  cat <<'EOF'
+Usage: scripts/new-site <target-directory> [options]
+
+Options:
+  --title TEXT          Site title
+  --url URL             Canonical base URL
+  --description TEXT    Site description
+  --tagline TEXT        Sidebar tagline
+  --color HEX           Theme colour, for example "#6e8fb1"
+  --github URL          GitHub link, or "" to hide it
+  --theme-version TAG   Theme tag to pin (default: v0.1.0)
+  --theme-repo URL      Theme repository URL
+  --theme-path PATH     Use a local theme directory instead of a submodule
+  -h, --help            Show this help
+EOF
+}
+
+die() {
+  echo "error: $*" >&2
+  exit 1
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --title|--url|--description|--tagline|--color|--github|--theme-version|--theme-repo|--theme-path)
+      [ "$#" -ge 2 ] || die "missing value for $1"
+      key="${1#--}"
+      key="${key//-/_}"
+      printf -v "$key" '%s' "$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -*)
+      die "unknown option: $1"
+      ;;
+    *)
+      [ -z "$target" ] || die "target directory specified more than once"
+      target="$1"
+      shift
+      ;;
+  esac
+done
+
+[ -n "$target" ] || die "missing target directory"
+[ -f "$root/template/zola.toml" ] || die "template not found at $root/template"
+
+mkdir -p "$target"
+target="$(cd "$target" && pwd)"
+if [ -n "$(find "$target" -mindepth 1 -maxdepth 1 -print -quit)" ]; then
+  die "target directory is not empty: $target"
+fi
+
+cp -a "$root/template/." "$target/"
+rm -rf "$target/.git" "$target/public" "$target/.zola" "$target/themes/researchproject"
+rm -f "$target/themes/.gitkeep"
+
+toml_escape() {
+  local value="$1"
+  value="${value//\\/\\\\}"
+  value="${value//\"/\\\"}"
+  printf '%s' "$value"
+}
+
+set_toml_string() {
+  local file="$1"
+  local key="$2"
+  local value
+  value="$(toml_escape "$3")"
+
+  case "$value" in
+    *$'\n'*) die "newlines are not supported in config values" ;;
+  esac
+
+  TOML_VALUE="$value" awk -v key="$key" '
+    BEGIN { value = ENVIRON["TOML_VALUE"]; found = 0 }
+    $0 ~ "^" key " = \"" {
+      print key " = \"" value "\""
+      found = 1
+      next
+    }
+    { print }
+    END {
+      if (!found) {
+        print "error: key " key " not found" > "/dev/stderr"
+        exit 1
+      }
+    }
+  ' "$file" > "$file.tmp"
+  mv "$file.tmp" "$file"
+}
+
+set_toml_string "$target/zola.toml" "title" "$title"
+set_toml_string "$target/zola.toml" "base_url" "$url"
+set_toml_string "$target/zola.toml" "description" "$description"
+set_toml_string "$target/zola.toml" "tagline" "$tagline"
+set_toml_string "$target/zola.toml" "theme_color" "$color"
+set_toml_string "$target/zola.toml" "github" "$github"
+
+if [ -n "$theme_path" ]; then
+  theme_path="$(cd "$theme_path" && pwd)"
+  [ -f "$theme_path/theme.toml" ] || die "not a Zola theme: $theme_path"
+  ln -s "$theme_path" "$target/themes/researchproject"
+  echo "using local theme: $theme_path"
+  echo "the symlink is for development only and should not be committed"
+else
+  command -v git >/dev/null 2>&1 || die "git is required for the theme submodule"
+  git -C "$target" init -q -b main
+  git -C "$target" submodule add "$theme_repo" themes/researchproject
+  git -C "$target/themes/researchproject" checkout "$theme_version"
+  git -C "$target" add .gitmodules themes/researchproject
+fi
+
+cat <<EOF
+
+Created $target
+
+Next steps:
+  cd "$target"
+  zola serve
+
+Edit zola.toml and replace static/logo.svg with your own logo.
+EOF

@@ -1,0 +1,13 @@
+base_url = "https://example.org"
+title = "Example Research Project"
+description = "A starter site for research projects and research groups."
+default_language = "en"
+theme = "researchproject"
+
+[extra]
+tagline = "A reusable Zola starter for research projects"
+theme_color = "#6e8fb1"
+logo = "logo.svg"
+favicon = "logo.svg"
+fonts = true
+github = ""

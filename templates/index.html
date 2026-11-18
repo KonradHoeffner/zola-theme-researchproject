@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.title }}{% if config.extra.tagline | default(value="") %} · {{ config.extra.tagline }}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="page">
+  {{ section.content | safe }}
+</div>
+{% endblock %}

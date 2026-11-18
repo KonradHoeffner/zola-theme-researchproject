@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} · {{ config.title }}{% endblock %}
+
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+
+{% block content %}
+<div class="page">
+  <h1 class="page-title">{{ page.title }}</h1>
+  {{ page.content | safe }}
+
+  {% set bib = load_data(path="publications.bib", format="bibtex") %}
+  <p class="publication-download">
+    <a href="{{ get_url(path='publications.bib') }}">Download BibTeX</a>
+  </p>
+
+  {% if bib.bibliographies %}
+    {% set_global current_year = "" %}
+    {% for entry in bib.bibliographies %}
+      {% set tags = entry.tags %}
+      {% set year = tags.year | default(value="") %}
+      {% if year != current_year %}
+        {% if not loop.first %}</section>{% endif %}
+        <section class="publication-year">
+        <h2>{% if year %}{{ year }}{% else %}Undated{% endif %}</h2>
+        {% set_global current_year = year %}
+      {% endif %}
+
+      <article class="publication" id="{{ entry.citation_key }}">
+        {% if tags.pdf %}
+        <p><object data="{{ get_url(path=tags.pdf) }}" width="100%" height="630" type="application/pdf"></object></p>
+        {% endif %}
+        <p class="publication-meta">
+          {% if tags.author %}<em>{{ tags.author | replace(from=" and ", to=", ") }}</em>. {% endif %}
+          <strong>{{ tags.title | replace(from="{", to="") | replace(from="}", to="") | replace(from="---", to="—") }}</strong>.
+          {% if tags.journal %}<em>{{ tags.journal }}</em>{% elif tags.booktitle %}<em>{{ tags.booktitle }}</em>{% endif %}{% if tags.series %}, <em>{{ tags.series }}</em>{% endif %}{% if tags.volume %} {{ tags.volume }}{% endif %}{% if tags.number %}({{ tags.number }}){% endif %}{% if tags.pages %}:{{ tags.pages | replace(from="--", to="–") }}{% endif %}{% if year %}, {{ year }}{% endif %}.{% if tags.publisher %} {{ tags.publisher }}.{% endif %}{% if tags.doi %} DOI: <a href="https://doi.org/{{ tags.doi }}">{{ tags.doi }}</a>.{% endif %}{% if tags.url %} <a href="{{ tags.url }}">Link</a>.{% endif %}
+        </p>
+        <details>
+          <summary>BibTeX</summary>
+          <pre>@{{ entry.entry_type }}{{ "{" }}{{ entry.citation_key }},
+{% if tags.author %}  author = {{ "{" }}{{ tags.author | safe }}{{ "}" }},
+{% endif %}{% if tags.title %}  title = {{ "{" }}{{ tags.title | safe }}{{ "}" }},
+{% endif %}{% if tags.journal %}  journal = {{ "{" }}{{ tags.journal | safe }}{{ "}" }},
+{% endif %}{% if tags.booktitle %}  booktitle = {{ "{" }}{{ tags.booktitle | safe }}{{ "}" }},
+{% endif %}{% if tags.series %}  series = {{ "{" }}{{ tags.series | safe }}{{ "}" }},
+{% endif %}{% if tags.volume %}  volume = {{ "{" }}{{ tags.volume | safe }}{{ "}" }},
+{% endif %}{% if tags.number %}  number = {{ "{" }}{{ tags.number | safe }}{{ "}" }},
+{% endif %}{% if tags.pages %}  pages = {{ "{" }}{{ tags.pages | safe }}{{ "}" }},
+{% endif %}{% if tags.year %}  year = {{ "{" }}{{ tags.year | safe }}{{ "}" }},
+{% endif %}{% if tags.publisher %}  publisher = {{ "{" }}{{ tags.publisher | safe }}{{ "}" }},
+{% endif %}{% if tags.doi %}  doi = {{ "{" }}{{ tags.doi | safe }}{{ "}" }},
+{% endif %}{% if tags.url %}  url = {{ "{" }}{{ tags.url | safe }}{{ "}" }},
+{% endif %}{% if tags.note %}  note = {{ "{" }}{{ tags.note | safe }}{{ "}" }},
+{% endif %}{{ "}" }}</pre>
+        </details>
+      </article>
+    {% endfor %}
+    </section>
+  {% else %}
+    <p>No publications have been added yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

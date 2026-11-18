@@ -1,0 +1,28 @@
+{% set logo = config.extra.logo | default(value="logo.svg") %}
+{% set here = current_url | default(value="") %}
+{% set here_path = current_path | default(value="") %}
+{% set root = get_section(path="_index.md") %}
+<div class="sidebar">
+  <div class="sidebar-about">
+    <a href="{{ config.base_url }}/" aria-label="{{ config.title }} home">
+      <img id="logo" src="{{ get_url(path=logo) }}" alt="{{ config.title }}">
+    </a>
+    {% if config.extra.tagline | default(value="") %}
+    <p class="lead">{{ config.extra.tagline }}</p>
+    {% endif %}
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item{% if here_path == '/' %} active{% endif %}" href="{{ config.base_url }}/">Home</a>
+    {% for p in root.pages %}
+      {% if not p.hidden %}
+      <a class="sidebar-nav-item{% if here == p.permalink %} active{% endif %}" href="{{ p.permalink }}">{{ p.title }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if config.extra.github | default(value="") %}
+    <a class="sidebar-nav-item" href="{{ config.extra.github }}">GitHub</a>
+    {% endif %}
+  </nav>
+
+  <p class="copyright">© {{ now() | date(format="%Y") }} {{ config.title }}</p>
+</div>

@@ -1,0 +1,15 @@
+name = "researchproject"
+description = "A clean research project and research group website theme based on Poole and Hyde"
+license = "MIT"
+min_version = "0.23.0"
+
+[author]
+name = "Konrad Höffner"
+
+[extra]
+theme_color = "#6e8fb1"
+tagline = "Research Project"
+logo = "logo.svg"
+favicon = "logo.svg"
+fonts = true
+github = ""

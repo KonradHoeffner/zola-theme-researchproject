@@ -1,0 +1,31 @@
+{% set tagline = config.extra.tagline | default(value="") %}
+{% set theme_color = config.extra.theme_color | default(value="#6e8fb1") %}
+{% set logo = config.extra.logo | default(value="logo.svg") %}
+{% set favicon = config.extra.favicon | default(value=logo) %}
+<!DOCTYPE html>
+<html lang="{{ config.default_language | default(value='en') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% if tagline %} · {{ tagline }}{% endif %}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ config.description | default(value='') }}{% endblock %}">
+  <link rel="icon" href="{{ get_url(path=favicon) }}">
+  {% if config.extra.fonts | default(value=true) %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  {% endif %}
+  <link rel="stylesheet" href="{{ get_url(path='css/poole.css') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/hyde.css') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/syntax.css') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/theme.css') }}">
+  <style>:root { --theme-color: {{ theme_color }}; }</style>
+  {% block head %}{% endblock %}
+</head>
+<body class="theme-base-researchproject">
+  {% include "sidebar.html" %}
+  <div class="content container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

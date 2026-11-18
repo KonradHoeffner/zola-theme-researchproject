@@ -1,0 +1,140 @@
+:root {
+  --theme-color: #6e8fb1;
+}
+
+/* Sidebar colour and content links are driven by one CSS variable. */
+.theme-base-researchproject .sidebar {
+  background-color: var(--theme-color);
+}
+
+.theme-base-researchproject .content a,
+.theme-base-researchproject .related-posts li a:hover {
+  color: var(--theme-color);
+}
+
+/* The logo is a real image instead of a CSS background on an empty div. */
+#logo {
+  display: block;
+  width: 100%;
+  max-height: 14rem;
+  object-fit: contain;
+  margin: 0 auto 1rem;
+}
+
+.sidebar-about {
+  text-align: center;
+}
+
+.sidebar-about .lead {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+}
+
+.copyright {
+  font-size: 50%;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* People and team pages. */
+.portrait > img {
+  border-radius: 50%;
+  height: 8em;
+  width: 8em;
+  object-fit: cover;
+  justify-self: center;
+}
+
+.teamGrid {
+  display: grid;
+  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1em;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.team-card h3 {
+  margin-top: 0;
+}
+
+.flexy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.flex-item {
+  width: 15rem;
+  min-height: 15rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.flex-item img {
+  display: inline;
+  max-width: 100%;
+  max-height: 80%;
+  margin: auto;
+}
+
+.group-photo {
+  margin-top: 5em;
+}
+
+/* Publications. */
+.publication {
+  margin-bottom: 2rem;
+}
+
+.publication-meta {
+  line-height: 1.5;
+}
+
+.publication details {
+  margin-top: 0.5rem;
+}
+
+.publication summary {
+  cursor: pointer;
+  color: var(--theme-color);
+  font-weight: bold;
+}
+
+.publication pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.publication-download {
+  margin: 1rem 0 2rem;
+}
+
+@media screen and (max-width: 48em) {
+  #logo {
+    max-height: 8rem;
+  }
+
+  .sidebar {
+    padding: 0.5rem 1rem;
+  }
+
+  .sidebar-nav .sidebar-nav-item {
+    display: inline;
+    white-space: nowrap;
+    margin-right: 0.75rem;
+  }
+
+  .content {
+    padding-top: 0.5rem;
+  }
+}

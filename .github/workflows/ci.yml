@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Zola 0.23.6
+        run: |
+          curl -sSL https://github.com/getzola/zola/releases/download/v0.23.6/zola-v0.23.6-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          sudo mv zola /usr/local/bin/
+
+      - name: Link theme into the starter
+        run: ./scripts/dev-link.sh
+
+      - name: Build the starter against the local theme
+        working-directory: template
+        run: zola build
+
+      - name: Check internal links and anchors
+        working-directory: template
+        run: zola check
